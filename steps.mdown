@@ -1,0 +1,7 @@
+# Steps
+
+  * lein new compojure tictactoe_server
+  * cd tictactoe_server
+  * git init
+  * git add .
+  * git commit -m "initiali commit"
