@@ -4,4 +4,5 @@
   * cd tictactoe_server
   * git init
   * git add .
-  * git commit -m "initiali commit"
+  * git commit -m "initial commit"
+  * wrote a game.clj namespace
