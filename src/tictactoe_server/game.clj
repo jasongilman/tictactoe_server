@@ -3,8 +3,6 @@
 ; In memory database of the entire set of games. 
 (def ^:private games (ref {} ) )
 
-(defrecord Game [id game-state])
-
 (defn- create-game-state 
   "Creates a new empty game state"
   [] 
@@ -18,7 +16,7 @@
   []
   (dosync 
     (let [game-id (count @games)
-          new-game (->Game game-id (create-game-state))]
+          new-game {:id game-id :game-state (create-game-state)}]
       (alter games assoc game-id new-game)
       new-game)))
 
@@ -39,6 +37,11 @@
   "Returns all the current games"
   []
   (vals @games))
+
+(defn get-game
+  "Gets a game by id or nil if the game doesn't exist"
+  [id]
+  (@games id))
 
 ; TODO figure out a better way to do validations
 

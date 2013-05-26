@@ -10,10 +10,47 @@
    :headers {"Content-Type" "application/edn"}
    :body (pr-str data)})
 
+(defn get-game [id]
+  (let [g (game/get-game (read-string id))]
+    (if g
+      (generate-response g)
+      (generate-response (str "No game with id " id) 404))))
+  
+; TODO not quite happy with how this one is laid out. An improvment might be to 
+; do some sort of chaining here like interceptors. 
+(defn mark [id data]
+  (let [g (game/get-game (read-string id))]
+    (cond
+      
+      (not g) 
+      (generate-response (str "No game with id " id) 404)
+      
+      (not (and (map? data)
+                (= (set (keys data)) #{:row :column}))) 
+      (generate-response 
+        "Mark must be passed a clojure map with row and column" 
+        400)
+      
+      :else 
+      (let [row (:row data)
+            column (:column data)
+            errors (game/validate-update g :x row column)]
+        (if (> (count errors) 0)
+          (generate-response errors 400)
+          (generate-response (game/mark-position g :x row column)))))))
+      
 (defroutes app-routes
-  (GET "/" [] "Hello World")
-  (GET "/games" [] (generate-response (game/get-games)))
-  (POST "/games" [] (generate-response (game/create-game) 201))
+  (GET "/" [] "Try posting to /games")
+  (context 
+    "/games" [] 
+    (defroutes games-routes
+      (GET  "/" [] (generate-response (game/get-games)))
+      (POST "/" [] (generate-response (game/create-game) 201))
+      (context 
+        "/:id" [id]
+        (defroutes game
+          (GET  "/" [] (get-game id))
+          (POST "/mark" {edn-params :edn-params} (mark id edn-params))))))
   (route/resources "/")
   (route/not-found "Not Found"))
 
