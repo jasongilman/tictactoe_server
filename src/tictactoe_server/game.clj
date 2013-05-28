@@ -6,10 +6,9 @@
 (defn- create-game-state 
   "Creates a new empty game state"
   [] 
-  (let [blank-row {1 :blank 2 :blank 3 :blank}]
-    {1 blank-row
-     2 blank-row
-     3 blank-row}))
+  [[:blank :blank :blank]
+   [:blank :blank :blank]
+   [:blank :blank :blank]])
 
 (defn create-game
   "Creates a new game and returns it's id"
@@ -30,8 +29,9 @@
   "Places an X or O in the game at the given column and then saves
   The game."
   [game x-or-o row column]
-  (update-game
-    (assoc-in game [:game-state row column] x-or-o)))
+  (let [new-game (assoc-in game [:game-state row column] x-or-o)]
+    (update-game new-game)
+    new-game))
 
 (defn get-games
   "Returns all the current games"
@@ -46,13 +46,13 @@
 ; TODO figure out a better way to do validations
 
 (defn- validate-row [game x-or-o row column]
-  (if (or (> row 3) (< row 1)) 
-    ["Row should be a value 1, 2 or 3."]
+  (if (or (> row 2) (< row 0)) 
+    ["Row should be a value 0, 1, or 2."]
     []))
 
 (defn- validate-column [game x-or-o row column]
-  (if (or (> column 3) (< column 1)) 
-    ["Column should be a value 1, 2 or 3."]
+  (if (or (> column 2) (< column 0)) 
+    ["Column should be a value 0, 1, 2"]
     []))
 
 (defn- validate-x-or-o [game x-or-o row column]

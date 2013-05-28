@@ -3,6 +3,7 @@
   (:require [compojure.handler :as handler]
             [compojure.route :as route]
             [tictactoe_server.game :as game]
+            [tictactoe_server.player :as player]
             [ring.middleware.edn :as edn]))
 
 (defn generate-response [data & [status]]
@@ -37,7 +38,9 @@
             errors (game/validate-update g :x row column)]
         (if (> (count errors) 0)
           (generate-response errors 400)
-          (generate-response (game/mark-position g :x row column)))))))
+          (let [game2 (game/mark-position g :x row column)
+                game3 (player/make-move game2)]
+            (generate-response game3)))))))
       
 (defroutes app-routes
   (GET "/" [] "Try posting to /games")
