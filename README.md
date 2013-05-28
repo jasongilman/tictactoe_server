@@ -1,6 +1,6 @@
 # tictactoe_server
 
-FIXME
+Example Clojure web application that implements Tic Tac Toe on a RESTful API.
 
 ## Prerequisites
 
@@ -18,56 +18,54 @@ To start a web server for the application, run:
 
 ### Create a new game
 
-TODO the game state should be arrays
-
     curl -i -XPOST http://localhost:3000/games
 
     HTTP/1.1 201 Created
-    Date: Sun, 26 May 2013 01:29:12 GMT
+    Date: Tue, 28 May 2013 01:40:57 GMT
     Content-Type: application/edn;charset=ISO-8859-1
-    Content-Length: 123
+    Content-Length: 55
     Server: Jetty(7.6.1.v20120215)
 
-    {:id 0, :game-state {1 {1 :blank, 2 :blank, 3 :blank}, 2 {1 :blank, 2 :blank, 3 :blank}, 3 {1 :blank, 2 :blank, 3 :blank}}}
+    {:id 0, :game-state [[:b :b :b] [:b :b :b] [:b :b :b]]}
+
+The ```:b``` keywords stand for blank spaces.
+
+### Mark a position
+
+Post an EDN map containing ```:row``` and ```:column``` from a 0 based index to place an X. The server will play an O. Once a winner has been determined the ```:winner``` field will be set.
+
+    curl -i -XPOST  -H "Content-Type: application/edn" http://localhost:3000/games/0/mark -d '{:row 0 :column 0}'
+
+    HTTP/1.1 200 OK
+    Date: Tue, 28 May 2013 01:41:59 GMT
+    Content-Type: application/edn;charset=ISO-8859-1
+    Content-Length: 68
+    Server: Jetty(7.6.1.v20120215)
+
+    {:winner nil, :id 0, :game-state [[:x :o :b] [:b :b :b] [:b :b :b]]}
 
 ### List Games
 
     curl -i -XGET http://localhost:3000/games
 
     HTTP/1.1 200 OK
-    Date: Sun, 26 May 2013 01:29:42 GMT
+    Date: Tue, 28 May 2013 01:41:10 GMT
     Content-Type: application/edn;charset=ISO-8859-1
-    Content-Length: 125
+    Content-Length: 57
     Server: Jetty(7.6.1.v20120215)
 
-    ({:id 0, :game-state {1 {1 :blank, 2 :blank, 3 :blank}, 2 {1 :blank, 2 :blank, 3 :blank}, 3 {1 :blank, 2 :blank, 3 :blank}}})
+    ({:id 0, :game-state [[:b :b :b] [:b :b :b] [:b :b :b]]})
 
 ### Get Game
 
     curl -i -XGET http://localhost:3000/games/0
 
     HTTP/1.1 200 OK
-    Date: Sun, 26 May 2013 01:30:01 GMT
+    Date: Tue, 28 May 2013 01:41:24 GMT
     Content-Type: application/edn;charset=ISO-8859-1
-    Content-Length: 123
+    Content-Length: 55
     Server: Jetty(7.6.1.v20120215)
 
-    {:id 0, :game-state {1 {1 :blank, 2 :blank, 3 :blank}, 2 {1 :blank, 2 :blank, 3 :blank}, 3 {1 :blank, 2 :blank, 3 :blank}}}
+    {:id 0, :game-state [[:b :b :b] [:b :b :b] [:b :b :b]]}
 
-## Mark a position
 
-    TODO The response here should just be a the game. It's in another map.
-
-    curl -i -XPOST  -H "Content-Type: application/edn" http://localhost:3000/games/0/mark -d '{:row 1 :column 1}'
-
-    HTTP/1.1 200 OK
-    Date: Sun, 26 May 2013 01:30:52 GMT
-    Content-Type: application/edn;charset=ISO-8859-1
-    Content-Length: 123
-    Server: Jetty(7.6.1.v20120215)
-
-    {0 {:id 0, :game-state {1 {1 :x, 2 :blank, 3 :blank}, 2 {1 :blank, 2 :blank, 3 :blank}, 3 {1 :blank, 2 :blank, 3 :blank}}}}
-
-## License
-
-Copyright © 2013 FIXME
