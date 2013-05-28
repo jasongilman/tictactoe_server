@@ -5,7 +5,7 @@
   "Finds indices of columns with a blank value in the row."
   [row]
   (map first 
-       (filter #(= (last %) :blank)
+       (filter #(= (last %) :b)
                (map-indexed vector row))))
 
 (defn- find-all-blank-indices 

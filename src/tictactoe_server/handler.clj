@@ -38,9 +38,10 @@
             errors (game/validate-update g :x row column)]
         (if (> (count errors) 0)
           (generate-response errors 400)
-          (let [game2 (game/mark-position g :x row column)
-                game3 (player/make-move game2)]
-            (generate-response game3)))))))
+          (let [game2 (game/mark-position g :x row column)]
+            (if (:winner game2)
+              (generate-response game2)
+              (generate-response (player/make-move game2)))))))))
       
 (defroutes app-routes
   (GET "/" [] "Try posting to /games")
