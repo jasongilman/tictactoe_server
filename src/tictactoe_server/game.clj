@@ -15,16 +15,17 @@
         diagonal2 (map #(get-in rows %) [[0 2] [1 1] [2 0]])
         diagonals [diagonal1 diagonal2]
         sets (-> rows (concat col-vals) (concat diagonals))
-        winners (map distinct sets)]
+        uniqs (map distinct sets)]
     (ffirst (filter 
              #(not= % [:b]) 
              (filter 
                #(= 1 (count %)) 
-               winners)))))
+               uniqs)))))
 
 (defn- create-game-state 
   "Creates a new empty game state."
   [] 
+  (vec (repeat 3 (vec (repeat 3 :b))))
   [[:b :b :b]
    [:b :b :b]
    [:b :b :b]])
@@ -96,8 +97,6 @@
   "Validates that a new value in the game state is allowed with 
   the current value. Returns any errors"
   [game x-or-o row column]
-  ; TODO I don't really like the way that I wrote this but I'm not super 
-  ; familiar with idiomatic clojure to think of a better way
   (let [validations [validate-row
                      validate-column 
                      validate-x-or-o

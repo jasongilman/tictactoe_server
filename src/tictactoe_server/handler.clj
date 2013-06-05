@@ -17,7 +17,7 @@
       (generate-response g)
       (generate-response (str "No game with id " id) 404))))
   
-; TODO not quite happy with how this one is laid out. An improvment might be to 
+; TODO not quite happy with how this one is laid out. An improvement might be to 
 ; do some sort of chaining here like interceptors. 
 (defn mark [id data]
   (let [g (game/get-game (read-string id))]
@@ -53,6 +53,8 @@
       (context 
         "/:id" [id]
         (defroutes game
+          ; TODO can use middleware here to check for existance of game
+          ; and put it in the request
           (GET  "/" [] (get-game id))
           (POST "/mark" {edn-params :edn-params} (mark id edn-params))))))
   (route/resources "/")

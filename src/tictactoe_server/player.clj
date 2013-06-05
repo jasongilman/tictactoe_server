@@ -12,7 +12,8 @@
   "Returns a sequence of maps for each row containing the row index and the 
   blank columns for that row."
   [game]
-  (filter #(> (->> % (:blank-cols) (count)) 0)
+  ;; Look at comp 
+  (filter #(pos? (->> % :blank-cols count))
           (map-indexed 
             (fn [ind columns] {:row-index ind :blank-cols (find-blank-columns columns)}) 
             (:game-state game))))
