@@ -1,8 +1,0 @@
-# Steps
-
-  * lein new compojure tictactoe_server
-  * cd tictactoe_server
-  * git init
-  * git add .
-  * git commit -m "initial commit"
-  * wrote a game.clj namespace
