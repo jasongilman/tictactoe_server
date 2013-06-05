@@ -22,10 +22,12 @@
                #(= 1 (count %)) 
                uniqs)))))
 
+(defn delete-all []
+  (dosync (ref-set games {})))
+
 (defn- create-game-state 
   "Creates a new empty game state."
   [] 
-  (vec (repeat 3 (vec (repeat 3 :b))))
   [[:b :b :b]
    [:b :b :b]
    [:b :b :b]])
