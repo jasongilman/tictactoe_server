@@ -3,7 +3,6 @@
 ; In memory database of the entire set of games. 
 (def ^:private games (ref {} ) )
 
-
 (defn find-winner
   "Determines if there is a winner. Returns :x or :o or nil."
   [game]
